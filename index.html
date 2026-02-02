@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ÔN TẬP TỪ VỰNG TIẾNG ANH</title>
+    <title>ÔN TẬP TỪ VỰNG TIẾNG ANH - DESTINATION B1 UNIT 24</title>
     
-    <!-- Open Graph / Preview khi chia sẻ link -->
     <meta property="og:title" content="ÔN TẬP TỪ VỰNG TIẾNG ANH | DESTINATION B1 | UNIT 24">
     <meta property="og:description" content="Hãy ôn tập từ vựng tiếng Anh bằng cách không để chữ rơi mất.">
     <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/10431/10431322.png">
     <meta property="og:type" content="website">
     
-    <!-- Favicon -->
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/5780/5780484.png" type="image/png">
     
     <style>
@@ -20,7 +18,6 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden;
             font-family: 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(to bottom, #a0e7ff, #ffffff);
         }
@@ -32,21 +29,43 @@
         }
         h1 {
             color: #1e3d59;
-            margin: 10px 0;
+            margin: 10px 0 5px;
             font-size: 28px;
         }
+        .control-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 10px 0 15px;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.25s;
+            color: white;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+        #start-btn     { background: #4a90e2; }
+        #pause-btn     { background: #f39c12; display: none; }
+        #end-btn       { background: #e74c3c; display: none; }
+        #quizlet-btn   { background: #27ae60; }
+        #hint-btn      { background: #f39c12; color: white; display: none; margin: 10px; }
+
         #score, #progress, #message {
             margin: 5px 0;
             font-size: 24px;
         }
-        #progress {
-            font-weight: bold;
-            color: #4a90e2;
-        }
-        #message {
-            min-height: 35px;
-            font-weight: bold;
-        }
+        #progress { font-weight: bold; color: #4a90e2; }
+        #message { min-height: 35px; font-weight: bold; }
+
         #game-area {
             margin: 10px auto;
             width: 700px;
@@ -58,6 +77,47 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             background: #ffffff;
         }
+
+        /* Quizlet Pop-up */
+        #quizlet-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+        }
+        #quizlet-modal {
+            position: relative;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            width: 90%;
+            max-width: 1000px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+        #quizlet-modal h2 {
+            margin: 0 0 15px;
+            color: #1e3d59;
+            text-align: center;
+        }
+        #quizlet-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 32px;
+            cursor: pointer;
+            color: #e74c3c;
+        }
+        #quizlet-iframe-container {
+            width: 100%;
+            height: 550px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
         #vietnamese-word {
             position: absolute;
             font-size: 40px;
@@ -70,27 +130,22 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
             white-space: nowrap;
         }
-        @keyframes fall {
-            to { top: 370px; }
-        }
+        @keyframes fall { to { top: 370px; } }
+
         #timer {
             position: absolute;
-            top: 10px;
-            right: 15px;
+            top: 10px; right: 15px;
             font-size: 30px;
             font-weight: bold;
             color: #e74c3c;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255,255,255,0.9);
             padding: 8px 20px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             z-index: 10;
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
-        }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+
         #input-area {
             margin: 10px auto;
             padding: 15px;
@@ -99,24 +154,18 @@
             width: 700px;
             max-width: 95vw;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            flex-shrink: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
         }
         #letters-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            max-width: 100%;
         }
         .letter-box {
-            width: 50px;
-            height: 60px;
-            font-size: 32px;
-            font-weight: bold;
-            text-align: center;
-            line-height: 60px;
+            width: 50px; height: 60px;
+            font-size: 32px; font-weight: bold;
+            text-align: center; line-height: 60px;
             margin: 6px;
             border: 3px solid #4a90e2;
             border-radius: 10px;
@@ -124,64 +173,25 @@
             color: #1e3d59;
             transition: all 0.2s;
             text-transform: uppercase;
-            flex-shrink: 0;
         }
-        .letter-box.filled {
-            background-color: #4a90e2;
-            color: white;
-        }
-        .letter-box.correct {
-            background-color: #2ecc71;
-            border-color: #27ae60;
-        }
-        .letter-box.wrong {
-            background-color: #e74c3c;
-            border-color: #c0392b;
-        }
-        .letter-box.space {
-            background-color: #bdc3c7;
-            border-color: #95a5a6;
-            color: #7f8c8d;
-        }
-        .letter-box.hint {
-            background-color: #f39c12;
-            border-color: #e67e22;
-            color: white;
-        }
-        #hidden-input {
-            position: absolute;
-            left: -9999px;
-        }
-        #start-btn, #hint-btn {
-            font-size: 22px;
-            padding: 12px 30px;
-            margin: 10px;
-            background: #4a90e2;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(74,144,226,0.4);
-            transition: 0.3s;
-        }
-        #hint-btn {
-            background: #f39c12;
-            display: none;
-        }
-        #start-btn:hover, #hint-btn:hover {
-            transform: translateY(-3px);
-        }
+        .letter-box.filled    { background-color: #4a90e2; color: white; }
+        .letter-box.correct   { background-color: #2ecc71; border-color: #27ae60; }
+        .letter-box.wrong     { background-color: #e74c3c; border-color: #c0392b; }
+        .letter-box.space     { background-color: #bdc3c7; border-color: #95a5a6; color: #7f8c8d; }
+        .letter-box.hint      { background-color: #f39c12; border-color: #e67e22; color: white; }
+
+        #hidden-input { position: absolute; left: -9999px; }
+
         #overlay {
             display: none;
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            inset: 0;
             background: rgba(0,0,0,0.6);
             z-index: 100;
         }
         #result-popup {
             position: fixed;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             background: white;
             padding: 40px;
@@ -193,15 +203,7 @@
             max-width: 90%;
             width: 500px;
         }
-        #result-popup h2 {
-            font-size: 36px;
-            color: #1e3d59;
-            margin: 0 0 20px;
-        }
-        #result-popup p {
-            font-size: 24px;
-            margin: 15px 0;
-        }
+        #result-popup h2 { font-size: 36px; color: #1e3d59; margin: 0 0 20px; }
         #play-again-btn {
             font-size: 20px;
             padding: 12px 30px;
@@ -216,7 +218,14 @@
 </head>
 <body>
     <h1>Ôn Từ Vựng Tiếng Anh - DESTINATION UNIT 24</h1>
-    <button id="start-btn">Bắt Đầu</button>
+    
+    <div class="control-bar">
+        <button id="start-btn">Bắt Đầu</button>
+        <button id="pause-btn">Tạm Dừng</button>
+        <button id="end-btn">Kết Thúc Sớm</button>
+        <button id="quizlet-btn">Xem Quizlet Match</button>
+    </div>
+
     <div id="score">Điểm: 0</div>
     <div id="progress">Từ đã làm: 0 / 0</div>
     <div id="message"></div>
@@ -225,8 +234,22 @@
         <div id="letters-container"></div>
     </div>
     <button id="hint-btn">Gợi ý</button>
+
     <input type="text" id="hidden-input" autocomplete="off">
 
+    <!-- Quizlet Pop-up -->
+    <div id="quizlet-overlay">
+        <div id="quizlet-modal">
+            <span id="quizlet-close">×</span>
+            <h2>Quizlet Match - Ôn từ vựng</h2>
+            <div id="quizlet-iframe-container">
+                <iframe src="https://quizlet.com/1138172800/match/embed?i=2xampj&x=1jj1" 
+                        width="100%" height="100%" style="border:0;" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result overlay & popup -->
     <div id="overlay"></div>
     <div id="result-popup">
         <h2>🎉 Hoàn Thành! 🎉</h2>
@@ -238,38 +261,36 @@
 
     <script>
         const originalWords = [
-              { vi: "thừa nhận", en: "admit" },
-              { vi: "bắt giữ", en: "arrest" },
-              { vi: "tổ chức từ thiện; lòng nhân ái", en: "charity" },
-              { vi: "phạm (tội); cam kết", en: "commit" },
-              { vi: "cộng đồng", en: "community" },
-              { vi: "tòa án", en: "court" },
-              { vi: "tội phạm; thuộc tội phạm", en: "criminal" },
-              { vi: "văn hóa", en: "culture" },
-              { vi: "quen thuộc", en: "familiar" },
-              { vi: "chính phủ", en: "government" },
-
-              { vi: "thói quen", en: "habit" },
-              { vi: "thẻ căn cước / CMND", en: "identity card" },
-              { vi: "bất hợp pháp", en: "illegal" },
-              { vi: "chính trị", en: "politics" },
-              { vi: "dân số", en: "population" },
-              { vi: "nhà tù", en: "prison" },
-              { vi: "cuộc biểu tình; biểu tình", en: "protest" },
-              { vi: "cư dân", en: "resident" },
-              { vi: "có trách nhiệm", en: "responsible" },
-              { vi: "cướp", en: "rob" },
-
-              { vi: "thói quen hằng ngày; thường lệ", en: "routine" },
-              { vi: "lịch trình", en: "schedule" },
-              { vi: "tình huống", en: "situation" },
-              { vi: "thuộc xã hội", en: "social" },
-              { vi: "xã hội", en: "society" },
-              { vi: "ăn trộm", en: "steal" },
-              { vi: "truyền thống", en: "tradition" },
-              { vi: "điển hình", en: "typical" },
-              { vi: "bỏ phiếu; lá phiếu", en: "vote" },
-              { vi: "câu lạc bộ thanh thiếu niên", en: "youth club" }
+            { vi: "thừa nhận", en: "admit" },
+            { vi: "bắt giữ", en: "arrest" },
+            { vi: "tổ chức từ thiện; lòng nhân ái", en: "charity" },
+            { vi: "phạm (tội); cam kết", en: "commit" },
+            { vi: "cộng đồng", en: "community" },
+            { vi: "tòa án", en: "court" },
+            { vi: "tội phạm; thuộc tội phạm", en: "criminal" },
+            { vi: "văn hóa", en: "culture" },
+            { vi: "quen thuộc", en: "familiar" },
+            { vi: "chính phủ", en: "government" },
+            { vi: "thói quen", en: "habit" },
+            { vi: "thẻ căn cước / CMND", en: "identity card" },
+            { vi: "bất hợp pháp", en: "illegal" },
+            { vi: "chính trị", en: "politics" },
+            { vi: "dân số", en: "population" },
+            { vi: "nhà tù", en: "prison" },
+            { vi: "cuộc biểu tình; biểu tình", en: "protest" },
+            { vi: "cư dân", en: "resident" },
+            { vi: "có trách nhiệm", en: "responsible" },
+            { vi: "cướp", en: "rob" },
+            { vi: "thói quen hằng ngày; thường lệ", en: "routine" },
+            { vi: "lịch trình", en: "schedule" },
+            { vi: "tình huống", en: "situation" },
+            { vi: "thuộc xã hội", en: "social" },
+            { vi: "xã hội", en: "society" },
+            { vi: "ăn trộm", en: "steal" },
+            { vi: "truyền thống", en: "tradition" },
+            { vi: "điển hình", en: "typical" },
+            { vi: "bỏ phiếu; lá phiếu", en: "vote" },
+            { vi: "câu lạc bộ thanh thiếu niên", en: "youth club" }
         ];
 
         let words = [];
@@ -280,12 +301,15 @@
         let totalLettersNeeded = 0;
         let hintedIndices = [];
         let completedCount = 0;
-        let lastHintCompletedTheWord = false; // MỚI: Đánh dấu lần hint cuối có làm hoàn thành từ không
+        let lastHintCompletedTheWord = false;
         const totalWords = originalWords.length;
-        const duration = 30000;
+        const duration = 30000; // 30 giây
         let startTime = null;
         let timerInterval = null;
         let timeoutId = null;
+        let isPaused = false;
+        let pauseStartTime = 0;
+        let wordEl = null; // để pause animation
 
         const gameArea = document.getElementById('game-area');
         const lettersContainer = document.getElementById('letters-container');
@@ -294,6 +318,8 @@
         const progressDisplay = document.getElementById('progress');
         const messageDisplay = document.getElementById('message');
         const startBtn = document.getElementById('start-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const endBtn = document.getElementById('end-btn');
         const hintBtn = document.getElementById('hint-btn');
         const overlay = document.getElementById('overlay');
         const resultPopup = document.getElementById('result-popup');
@@ -311,6 +337,8 @@
 
         function startGame() {
             startBtn.style.display = 'none';
+            pauseBtn.style.display = 'inline-block';
+            endBtn.style.display = 'inline-block';
             hintBtn.style.display = 'inline-block';
             score = 0;
             hintCount = 0;
@@ -320,6 +348,7 @@
             messageDisplay.textContent = '';
             words = [...originalWords];
             startTime = Date.now();
+            isPaused = false;
             nextWord();
         }
 
@@ -343,7 +372,7 @@
             timerDisplay.id = 'timer';
             gameArea.appendChild(timerDisplay);
 
-            const wordEl = document.createElement('div');
+            wordEl = document.createElement('div');
             wordEl.id = 'vietnamese-word';
             wordEl.textContent = currentWord.vi;
             gameArea.appendChild(wordEl);
@@ -372,11 +401,16 @@
             timerDisplay.textContent = timeLeft;
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
+                if (isPaused) return;
                 timeLeft--;
                 timerDisplay.textContent = timeLeft;
                 if (timeLeft <= 10) {
                     timerDisplay.style.color = '#ff0000';
                     timerDisplay.style.animation = 'pulse 0.8s infinite';
+                }
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    revealAnswer();
                 }
             }, 1000);
 
@@ -417,8 +451,6 @@
         function giveHint() {
             const cleanAnswer = currentWord.en.replace(/ /g, '').toUpperCase();
             const currentTypedBefore = getCurrentTyped();
-
-            // Kiểm tra xem trước khi hint có đầy đủ chưa
             const wasCompleteBefore = currentTypedBefore === cleanAnswer;
 
             for (let i = 0; i < cleanAnswer.length; i++) {
@@ -433,10 +465,9 @@
 
             const currentTypedAfter = getCurrentTyped();
 
-            // Nếu sau lần hint này mới đủ từ → đánh dấu là hint cuối hoàn thành
             if (!wasCompleteBefore && currentTypedAfter === cleanAnswer) {
                 lastHintCompletedTheWord = true;
-                checkAnswer(); // Tự động chấm và qua từ mới
+                checkAnswer();
             }
 
             hiddenInput.focus();
@@ -476,7 +507,6 @@
             const current = getCurrentTyped();
 
             if (current === correct && !lastHintCompletedTheWord) {
-                // Đúng và không phải hint cuối hoàn thành → + điểm
                 score++;
                 scoreDisplay.textContent = `Điểm: ${score}`;
                 messageDisplay.textContent = '🎉 Đúng rồi! +1 điểm 🎉';
@@ -488,7 +518,6 @@
                     }
                 });
             } else if (current === correct && lastHintCompletedTheWord) {
-                // Đúng nhưng do hint cuối hoàn thành → không điểm
                 messageDisplay.textContent = '✅ Đúng nhưng dùng gợi ý chữ cuối – Không tính điểm';
                 messageDisplay.style.color = '#f39c12';
                 boxes.forEach(box => {
@@ -545,7 +574,50 @@
 
             overlay.style.display = 'block';
             resultPopup.style.display = 'block';
+            pauseBtn.style.display = 'none';
+            endBtn.style.display = 'none';
             hintBtn.style.display = 'none';
+        }
+
+        function togglePause() {
+            if (!timerInterval && !isPaused) return;
+
+            if (isPaused) {
+                // Tiếp tục
+                const pausedDuration = Date.now() - pauseStartTime;
+                startTime += pausedDuration;
+                pauseBtn.textContent = 'Tạm Dừng';
+                timerInterval = setInterval(() => {
+                    const elapsed = Date.now() - startTime;
+                    let timeLeft = Math.max(0, Math.floor((duration - elapsed) / 1000));
+                    timerDisplay.textContent = timeLeft;
+                    if (timeLeft <= 10) {
+                        timerDisplay.style.color = '#ff0000';
+                        timerDisplay.style.animation = 'pulse 0.8s infinite';
+                    }
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        revealAnswer();
+                    }
+                }, 200);
+                if (wordEl) wordEl.style.animationPlayState = 'running';
+                isPaused = false;
+            } else {
+                // Tạm dừng
+                pauseStartTime = Date.now();
+                clearInterval(timerInterval);
+                pauseBtn.textContent = 'Tiếp Tục';
+                if (wordEl) wordEl.style.animationPlayState = 'paused';
+                isPaused = true;
+            }
+        }
+
+        function endEarly() {
+            if (confirm("Bạn muốn kết thúc sớm và xem kết quả ngay không?")) {
+                clearTimeout(timeoutId);
+                clearInterval(timerInterval);
+                showResult();
+            }
         }
 
         hiddenInput.addEventListener('input', () => {
@@ -560,7 +632,7 @@
 
             const currentTypedLength = getCurrentTyped().length;
             if (currentTypedLength === totalLettersNeeded) {
-                lastHintCompletedTheWord = false; // Nếu tự gõ đủ → chắc chắn không phải hint cuối
+                lastHintCompletedTheWord = false;
                 checkAnswer();
             }
         });
@@ -575,12 +647,32 @@
             }
         });
 
-        hintBtn.addEventListener('click', giveHint);
+        // Event listeners
         startBtn.addEventListener('click', startGame);
+        pauseBtn.addEventListener('click', togglePause);
+        endBtn.addEventListener('click', endEarly);
+        hintBtn.addEventListener('click', giveHint);
         playAgainBtn.addEventListener('click', () => {
             overlay.style.display = 'none';
             resultPopup.style.display = 'none';
             startGame();
+        });
+
+        // Quizlet modal
+        const quizletBtn = document.getElementById('quizlet-btn');
+        const quizletOverlay = document.getElementById('quizlet-overlay');
+        const quizletClose = document.getElementById('quizlet-close');
+
+        quizletBtn.addEventListener('click', () => {
+            quizletOverlay.style.display = 'flex';
+        });
+
+        quizletClose.addEventListener('click', () => {
+            quizletOverlay.style.display = 'none';
+        });
+
+        quizletOverlay.addEventListener('click', (e) => {
+            if (e.target === quizletOverlay) quizletOverlay.style.display = 'none';
         });
 
         gameArea.addEventListener('click', () => hiddenInput.focus());
