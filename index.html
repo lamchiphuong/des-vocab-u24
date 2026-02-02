@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ÔN TẬP TỪ VỰNG TIẾNG ANH - DESTINATION B1 UNIT 24</title>
     
-    <meta property="og:title" content="ÔN TẬP TỪ VỰNG | DESTINATION B1 | UNIT 24">
+    <meta property="og:title" content="ÔN TẬP TỪ VỰNG TIẾNG ANH | DESTINATION B1 | UNIT 24">
     <meta property="og:description" content="Hãy ôn tập từ vựng tiếng Anh bằng cách không để chữ rơi mất.">
     <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/10431/10431322.png">
     <meta property="og:type" content="website">
@@ -223,7 +223,7 @@
         <button id="start-btn">Bắt Đầu</button>
         <button id="pause-btn">Tạm Dừng</button>
         <button id="end-btn">Kết Thúc Sớm</button>
-        <button id="quizlet-btn">Xem lại từ vựng</button>
+        <button id="quizlet-btn">Xem Quizlet Match</button>
     </div>
 
     <div id="score">Điểm: 0</div>
@@ -308,7 +308,7 @@
         let timeoutId = null;
         let isPaused = false;
         let pauseStartTime = 0;
-        let wordEl = null; // để pause animation
+        let wordEl = null;
 
         const gameArea = document.getElementById('game-area');
         const lettersContainer = document.getElementById('letters-container');
@@ -399,6 +399,9 @@
             let timeLeft = 30;
             timerDisplay.textContent = timeLeft;
             clearInterval(timerInterval);
+            clearTimeout(timeoutId);
+
+            // Khởi động timer hiển thị
             timerInterval = setInterval(() => {
                 if (isPaused) return;
                 timeLeft--;
@@ -413,8 +416,10 @@
                 }
             }, 1000);
 
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(revealAnswer, duration);
+            // Timeout hết giờ thực sự
+            timeoutId = setTimeout(() => {
+                if (!isPaused) revealAnswer();
+            }, duration);
         }
 
         function updateBoxes() {
@@ -497,7 +502,7 @@
         }
 
         function checkAnswer() {
-            if (!timeoutId) return;
+            if (!timeoutId || isPaused) return;
             clearTimeout(timeoutId);
             clearInterval(timerInterval);
             timeoutId = null;
@@ -541,7 +546,9 @@
         }
 
         function revealAnswer() {
+            if (isPaused) return;
             clearInterval(timerInterval);
+            clearTimeout(timeoutId);
             timeoutId = null;
             messageDisplay.textContent = `⏰ Hết giờ! Đáp án: ${currentWord.en}`;
             messageDisplay.style.color = '#f39c12';
@@ -562,6 +569,7 @@
 
         function showResult() {
             clearInterval(timerInterval);
+            clearTimeout(timeoutId);
             const totalTime = Math.floor((Date.now() - startTime) / 1000);
             const minutes = Math.floor(totalTime / 60);
             const seconds = totalTime % 60;
@@ -579,17 +587,20 @@
         }
 
         function togglePause() {
-            if (!timerInterval && !isPaused) return;
+            if (!currentWord || words.length === totalWords) return;
 
             if (isPaused) {
                 // Tiếp tục
                 const pausedDuration = Date.now() - pauseStartTime;
                 startTime += pausedDuration;
-                pauseBtn.textContent = 'Tạm Dừng';
+
+                // Khởi động lại timer hiển thị
                 timerInterval = setInterval(() => {
+                    if (isPaused) return;
                     const elapsed = Date.now() - startTime;
                     let timeLeft = Math.max(0, Math.floor((duration - elapsed) / 1000));
                     timerDisplay.textContent = timeLeft;
+
                     if (timeLeft <= 10) {
                         timerDisplay.style.color = '#ff0000';
                         timerDisplay.style.animation = 'pulse 0.8s infinite';
@@ -599,14 +610,26 @@
                         revealAnswer();
                     }
                 }, 200);
+
+                // Khởi động lại timeout thực
+                const remainingTime = duration - (Date.now() - startTime);
+                timeoutId = setTimeout(() => {
+                    if (!isPaused) revealAnswer();
+                }, Math.max(0, remainingTime));
+
                 if (wordEl) wordEl.style.animationPlayState = 'running';
+                pauseBtn.textContent = 'Tạm Dừng';
                 isPaused = false;
             } else {
                 // Tạm dừng
                 pauseStartTime = Date.now();
                 clearInterval(timerInterval);
-                pauseBtn.textContent = 'Tiếp Tục';
+                clearTimeout(timeoutId);
+                timerInterval = null;
+                timeoutId = null;
+
                 if (wordEl) wordEl.style.animationPlayState = 'paused';
+                pauseBtn.textContent = 'Tiếp Tục';
                 isPaused = true;
             }
         }
